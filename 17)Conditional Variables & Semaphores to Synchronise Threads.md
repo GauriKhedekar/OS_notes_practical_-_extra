@@ -767,6 +767,31 @@ Wake waiting thread
 
 ---
 
+- How They Execute (The Flow)Process synchronization uses a tool called a Semaphore. A semaphore is basically an integer variable that acts like a key to your - CS.
+- Check & Lock (wait): A process asks to execute code. It runs the wait() operation.The semaphore's value is lowered by 1.If the semaphore value drops below 0, the resource is busy. The process is blocked and placed into a waiting queue.
+- Execution (CS): If the wait operation passes, the process enters the Critical Section and safely executes its tasks.
+- Unlock (signal): When the process finishes its work in the CS, it runs the signal() operation.The semaphore's value is increased by 1.If there are other waiting processes in the queue, one of them is woken up and gets access to the CS.
+
+- Basic Code ExampleHere is the general structure of how these operations guard the CS:
+```
+// Shared Semaphore (initialized to 1)
+Semaphore mutex = 1; 
+
+// Process P
+do {
+    // 1. Wait (P-Operation): Request entry
+    wait(mutex); 
+    
+    // --- CRITICAL SECTION --- 
+    // Only one process can be in here at a time
+    
+    // 2. Signal (V-Operation): Leave and unlock
+    signal(mutex); 
+    
+    // --- REMAINDER SECTION ---
+} while (true);
+```
+
 # One-Line Interview Definitions
 
 Condition Variable:
